@@ -26,7 +26,7 @@ public class AddSubCommand extends FriendSubCommand {
             Session session = SessionManager.getInstance().getSession(args[0]);
 
             if (session.getUuid().equals(player.getUniqueId())) {
-                session.sendMessage(new ComponentBuilder("No puedes enviarte una solicitud de amistad a ti mismo.").color(ChatColor.RED).create()[0]);
+                player.sendMessage(new ComponentBuilder("No puedes enviarte una solicitud de amistad a ti mismo.").color(ChatColor.RED).create()[0]);
 
                 return;
             }

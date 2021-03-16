@@ -9,6 +9,7 @@ import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.session.Session;
 import org.bson.Document;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +30,17 @@ public class MongoDBProvider implements IProvider {
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), ()-> {
             Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUuid().toString())).first();
 
+            Document newDocument = new Document(new HashMap<String, Object>() {{
+                this.put("uuid", session.getUuid().toString());
+                this.put("name", session.getName());
+                this.put("friends", session.getFriends());
+                this.put("requests", session.getRequests());
+            }});
+
             if (document == null || document.isEmpty()) {
-                this.friendsCollection.insertOne(this.toDocument(session));
+                this.friendsCollection.insertOne(newDocument);
             } else {
-                this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUuid().toString()), this.toDocument(session));
+                this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUuid().toString()), newDocument);
             }
         });
     }
