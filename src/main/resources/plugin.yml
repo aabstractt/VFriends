@@ -1,0 +1,5 @@
+name: VicnixFriends
+version: 1.0
+main: net.vicnix.friends.VicnixFriends
+author: iTheTrollIdk
+description: Friends system for Vicnix Network
