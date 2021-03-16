@@ -48,21 +48,17 @@ public class ListSubCommand extends FriendSubCommand {
                     continue;
                 }
 
-                BaseComponent[] components = new ComponentBuilder(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER", target.getName()))
+                session.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER", target.getName()))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER_TEXT", target.getName()))}))
                         .append(Translation.getInstance().translateString("FRIEND_ONLINE", Translation.getInstance().translateServerPrefix(target.getInstance().getServer().getInfo())), ComponentBuilder.FormatRetention.NONE)
-                        .create();
-
-                session.sendMessage(components[0], components[1]);
+                        .create());
             } catch (SessionException e) {
-                session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create()[0]);
+                session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
 
                 return;
             }
         }
 
-        BaseComponent[] components = new ComponentBuilder(Translation.getInstance().translateString("FRIEND_OFFLINE_TEXT")).append(String.join(", ", offline.toArray(new String[0]))).color(ChatColor.RED).create();
-
-        session.sendMessage(components[0], components[1]);
+        session.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_OFFLINE_TEXT")).append(String.join(", ", offline.toArray(new String[0]))).color(ChatColor.RED).create());
     }
 }

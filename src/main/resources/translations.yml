@@ -20,6 +20,11 @@ FRIEND_OFFLINE_TEXT: "&7Desconectados:\n"
 FRIEND_REMOVED_YOU: "&c{0} te ha eliminado de su lista de amigos"
 FRIEND_REMOVED: "&aHaz eliminado a {0} de tu lista de amigos"
 
+# Pending command translations
+FRIENDS_PENDING_LIST: "&d--------- &e&lSolicitudes de amigo&r &7({0}/{1}) &d---------"
+FRIENDS_PENDING_SENT_LIST: "&d--------- &e&lSolicitudes de amigo enviadas&r &7({0}/{1}) &d---------"
+
 # Listener translations
-FRIEND_JOINED: "&eAmigos > &7{0} &ase ha unido."
+FRIEND_LISTENER_PREFIX: "&eAmigos > "
+FRIEND_JOINED: " &ase ha unido."
 FRIEND_LEFT: "&eAmigos > &7{0} &ase ha ido."

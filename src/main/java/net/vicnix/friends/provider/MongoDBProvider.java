@@ -4,12 +4,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import net.md_5.bungee.api.ProxyServer;
-import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.session.Session;
 import org.bson.Document;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,22 +24,19 @@ public class MongoDBProvider implements IProvider {
     }
 
     public void saveSession(Session session) {
-        ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), ()-> {
-            Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUniqueId().toString())).first();
+        Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUniqueId().toString())).first();
 
-            Document newDocument = new Document(new HashMap<String, Object>() {{
-                this.put("uuid", session.getUniqueId().toString());
-                this.put("name", session.getName());
-                this.put("friends", session.getFriends());
-                this.put("requests", session.getRequests());
-            }});
+        Document newDocument = new Document("uuid", session.getUniqueId().toString())
+                .append("name", session.getName())
+                .append("friends", session.getFriends())
+                .append("requests", session.getRequests())
+                .append("sentRequests", session.getSentRequests());
 
-            if (document == null || document.isEmpty()) {
-                this.friendsCollection.insertOne(newDocument);
-            } else {
-                this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUniqueId().toString()), newDocument);
-            }
-        });
+        if (document == null || document.isEmpty()) {
+            this.friendsCollection.insertOne(newDocument);
+        } else {
+            this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUniqueId().toString()), newDocument);
+        }
     }
 
     @Override
@@ -54,7 +48,7 @@ public class MongoDBProvider implements IProvider {
             return null;
         }
 
-        return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"));
+        return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"));
     }
 
     public Session loadSession(UUID uuid) {
@@ -74,6 +68,6 @@ public class MongoDBProvider implements IProvider {
             name = document.getString("name");
         }
 
-        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"));
+        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"));
     }
 }

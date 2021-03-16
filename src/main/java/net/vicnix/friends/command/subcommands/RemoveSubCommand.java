@@ -22,7 +22,7 @@ public class RemoveSubCommand extends FriendSubCommand {
             Session target = SessionManager.getInstance().getOfflineSession(args[0]);
 
             if (!session.isFriend(target)) {
-                session.sendMessage(new ComponentBuilder("Este jugador no esta en tu lista de amigos").color(ChatColor.RED).create()[0]);
+                session.sendMessage(new ComponentBuilder("Este jugador no esta en tu lista de amigos").color(ChatColor.RED).create());
 
                 return;
             }
@@ -35,7 +35,7 @@ public class RemoveSubCommand extends FriendSubCommand {
             session.sendMessage(Translation.getInstance().translateString("FRIEND_REMOVED", target.getName()));
             target.sendMessage(Translation.getInstance().translateString("FRIEND_REMOVED_YOU", target.getName()));
         } catch (SessionException e) {
-            session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create()[0]);
+            session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
         }
     }
 }

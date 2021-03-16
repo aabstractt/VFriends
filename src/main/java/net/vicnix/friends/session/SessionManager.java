@@ -1,8 +1,10 @@
 package net.vicnix.friends.session;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
+import net.vicnix.friends.translation.Translation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,10 +85,20 @@ public class SessionManager {
     public void closeSession(ProxiedPlayer player) {
         Session session = this.getSessionPlayer(player);
 
-        session.intentSave(true);
+        ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> {
+            for (String uuid : session.getFriends()) {
+                ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
 
-        ProxyServer.getInstance().getLogger().info("Closing session for " + session.getName());
+                if (target == null) continue;
 
-        this.sessions.remove(player.getUniqueId().toString());
+                target.sendMessage(new TextComponent(Translation.getInstance().translateString("FRIEND_LEFT", session.getName())));
+            }
+
+            session.intentSave(true);
+
+            ProxyServer.getInstance().getLogger().info("Closing session for " + session.getName());
+
+            this.sessions.remove(player.getUniqueId().toString());
+        });
     }
 }

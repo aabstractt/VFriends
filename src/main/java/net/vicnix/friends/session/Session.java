@@ -19,6 +19,7 @@ public class Session {
     private List<String> friends = new ArrayList<>();
 
     private List<String> requests = new ArrayList<>();
+    private List<String> sentRequests = new ArrayList<>();
 
     public Session(String name, UUID uuid) {
         this.name = name;
@@ -26,12 +27,14 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public Session(String name, UUID uuid, List<String> friends, List<String> requests) {
+    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests) {
         this(name, uuid);
 
         this.friends = friends;
 
         this.requests = requests;
+
+        this.sentRequests = sentRequests;
     }
 
     public String getName() {
@@ -100,6 +103,26 @@ public class Session {
         return this.requests.contains(uuid.toString());
     }
 
+    public List<String> getSentRequests() {
+        return sentRequests;
+    }
+
+    public void addSentRequest(Session session) {
+        if (this.alreadySentRequest(session.getUniqueId())) return;
+
+        this.sentRequests.add(session.getUniqueId().toString());
+    }
+
+    public void removeSentRequest(Session session) {
+        if (!this.alreadySentRequest(session.getUniqueId())) return;
+
+        this.sentRequests.remove(session.getUniqueId().toString());
+    }
+
+    public Boolean alreadySentRequest(UUID uuid) {
+        return this.sentRequests.contains(uuid.toString());
+    }
+
     public Boolean isConnected() {
         return this.getInstance() != null;
     }
@@ -129,7 +152,11 @@ public class Session {
     public void intentSave(Boolean force) {
         if (this.isConnected() && !force) return;
 
-        VicnixFriends.getInstance().getProvider().saveSession(this);
+        if (force) {
+            VicnixFriends.getInstance().getProvider().saveSession(this);
+        } else {
+            ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSession(this));
+        }
     }
 
     @Override
