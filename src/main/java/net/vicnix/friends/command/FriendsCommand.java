@@ -6,7 +6,12 @@ import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import net.vicnix.friends.command.subcommands.AcceptSubCommand;
 import net.vicnix.friends.command.subcommands.AddSubCommand;
+import net.vicnix.friends.command.subcommands.ListSubCommand;
+import net.vicnix.friends.command.subcommands.RemoveSubCommand;
+import net.vicnix.friends.session.Session;
+import net.vicnix.friends.session.SessionManager;
 
 import java.util.*;
 
@@ -20,6 +25,15 @@ public class FriendsCommand extends Command implements TabExecutor {
 
         this.registerSubCommand(new AddSubCommand());
         this.registerSubCommand(new AddSubCommand(), "añadir");
+
+        this.registerSubCommand(new AcceptSubCommand());
+        this.registerSubCommand(new AcceptSubCommand(), "aceptar");
+
+        this.registerSubCommand(new ListSubCommand());
+        this.registerSubCommand(new ListSubCommand(), "lista");
+
+        this.registerSubCommand(new RemoveSubCommand());
+        this.registerSubCommand(new RemoveSubCommand(), "eliminar");
     }
 
     @Override
@@ -68,7 +82,15 @@ public class FriendsCommand extends Command implements TabExecutor {
             return;
         }
 
-        subCommand.execute(player, newArgs);
+        Session session = SessionManager.getInstance().getSessionPlayer(player);
+
+        if (session == null) {
+            player.sendMessage(new ComponentBuilder("An error occurred!").color(ChatColor.RED).create()[0]);
+
+            return;
+        }
+
+        subCommand.execute(session, newArgs);
     }
 
     private void showHelpMessage(ProxiedPlayer player) {

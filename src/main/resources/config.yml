@@ -1,0 +1,10 @@
+servers-prefix:
+  Lobby: "el Lobby principal"
+  BWLobby: "el Lobby de BedWars"
+  SWLobby: "el Lobby de SkyWars"
+  sw: "SkyWars"
+  bw-: "BedWars"
+  KB: "Knockback"
+  SkyBlock: "SkyBlock"
+  Creativo: "Creativo"
+server-unknown: "Desconocido"

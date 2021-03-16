@@ -28,10 +28,10 @@ public class MongoDBProvider implements IProvider {
 
     public void saveSession(Session session) {
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), ()-> {
-            Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUuid().toString())).first();
+            Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUniqueId().toString())).first();
 
             Document newDocument = new Document(new HashMap<String, Object>() {{
-                this.put("uuid", session.getUuid().toString());
+                this.put("uuid", session.getUniqueId().toString());
                 this.put("name", session.getName());
                 this.put("friends", session.getFriends());
                 this.put("requests", session.getRequests());
@@ -40,7 +40,7 @@ public class MongoDBProvider implements IProvider {
             if (document == null || document.isEmpty()) {
                 this.friendsCollection.insertOne(newDocument);
             } else {
-                this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUuid().toString()), newDocument);
+                this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUniqueId().toString()), newDocument);
             }
         });
     }
@@ -57,6 +57,10 @@ public class MongoDBProvider implements IProvider {
         return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"));
     }
 
+    public Session loadSession(UUID uuid) {
+        return this.loadSession(uuid, null);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public Session loadSession(UUID uuid, String name) {
@@ -66,10 +70,10 @@ public class MongoDBProvider implements IProvider {
             return null;
         }
 
-        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"));
-    }
+        if (name == null) {
+            name = document.getString("name");
+        }
 
-    private Document toDocument(Session session) {
-        return new Document("uuid", session.getUuid().toString()).append("name", session.getName()).append("friends", session.getFriends()).append("requests", session.getRequests());
+        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"));
     }
 }

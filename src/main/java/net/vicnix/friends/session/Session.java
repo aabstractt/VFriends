@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.vicnix.friends.VicnixFriends;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Session {
         return this.name;
     }
 
-    public UUID getUuid() {
+    public UUID getUniqueId() {
         return this.uuid;
     }
 
@@ -45,16 +46,58 @@ public class Session {
         return this.friends;
     }
 
+    public void addFriend(Session session) {
+        this.addFriend(session.getUniqueId());
+    }
+
+    public void addFriend(UUID uuid) {
+        if (this.isFriend(uuid)) return;
+
+        this.friends.add(uuid.toString());
+    }
+
+    public void removeFriend(Session session) {
+        this.removeFriend(session.getUniqueId());
+    }
+
+    public void removeFriend(UUID uuid) {
+        this.friends.remove(uuid.toString());
+    }
+
+    public Boolean isFriend(Session session) {
+        return this.isFriend(session.getUniqueId());
+    }
+
+    public Boolean isFriend(UUID uuid) {
+        return this.friends.contains(uuid.toString());
+    }
+
     public List<String> getRequests() {
         return this.requests;
     }
 
-    public void addRequest(ProxiedPlayer player) {
-        this.requests.add(player.getUniqueId().toString());
+    public void addRequest(Session session) {
+        this.addRequest(session.getUniqueId());
     }
 
-    public Boolean alreadyRequested(ProxiedPlayer player) {
-        return this.requests.contains(player.getUniqueId().toString());
+    public void addRequest(UUID uuid) {
+        this.requests.add(uuid.toString());
+    }
+
+    public void removeRequest(Session session) {
+        this.removeRequest(session.getUniqueId());
+    }
+
+    public void removeRequest(UUID uuid) {
+        this.requests.remove(uuid.toString());
+    }
+
+    public Boolean alreadyRequested(Session session) {
+        return this.alreadyRequested(session.getUniqueId());
+    }
+
+    public Boolean alreadyRequested(UUID uuid) {
+        return this.requests.contains(uuid.toString());
     }
 
     public Boolean isConnected() {
@@ -63,6 +106,8 @@ public class Session {
 
     public void sendMessage(String message) {
         if (!this.isConnected()) return;
+
+        if (message.isEmpty()) return;
 
         this.getInstance().sendMessage(new TextComponent(message));
     }
@@ -75,6 +120,16 @@ public class Session {
 
     public ProxiedPlayer getInstance() {
         return ProxyServer.getInstance().getPlayer(this.name);
+    }
+
+    public void intentSave() {
+        this.intentSave(false);
+    }
+
+    public void intentSave(Boolean force) {
+        if (this.isConnected() && !force) return;
+
+        VicnixFriends.getInstance().getProvider().saveSession(this);
     }
 
     @Override

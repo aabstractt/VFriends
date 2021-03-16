@@ -1,3 +1,25 @@
+# Add command translations
 ALREADY_SENT_FRIEND_REQUEST: "&cYa le haz enviado una solicitud de amigos a {0}"
 FRIEND_REQUEST_RECEIVE: "&aHaz recibido una nueva solicitud de amigos de {0}"
 FRIEND_REQUEST_SENT: "&aHaz enviado una solicitud de amigos a {0}"
+
+# Accept command translation
+FRIEND_REQUEST_NOT_FOUND: "No tienes ninguna solicitud de amigos pendiente de este jugador."
+FRIEND_REQUEST_AS_FRIEND_ACCEPTED: "&a{0} acepto tu solicitud de amigos!"
+FRIEND_REQUEST_ACCEPTED: "&aAceptaste la solicitud de amigos de {0}"
+
+# List command translations
+FRIENDS_LIST: "&d--------- &e&lAmigos&r &7({0}/{1}) &d---------"
+FRIEND_LIST_EMPTY: "&cTu lista de amigos esta vacia"
+FRIEND_ONLINE_HOVER: "&a{0}"
+FRIEND_ONLINE_HOVER_TEXT: "&aClick para mandar un mensaje a {0}"
+FRIEND_ONLINE: " &f- &7esta conectado en {0}"
+FRIEND_OFFLINE_TEXT: "&7Desconectados:\n"
+
+# Remove command translations
+FRIEND_REMOVED_YOU: "&c{0} te ha eliminado de su lista de amigos"
+FRIEND_REMOVED: "&aHaz eliminado a {0} de tu lista de amigos"
+
+# Listener translations
+FRIEND_JOINED: "&eAmigos > &7{0} &ase ha unido."
+FRIEND_LEFT: "&eAmigos > &7{0} &ase ha ido."

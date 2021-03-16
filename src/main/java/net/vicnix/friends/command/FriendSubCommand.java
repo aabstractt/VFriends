@@ -1,13 +1,14 @@
 package net.vicnix.friends.command;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.vicnix.friends.session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class FriendSubCommand {
 
-    public abstract void execute(ProxiedPlayer player, String[] args);
+    public abstract void execute(Session session, String[] args);
 
     /**
      * Gets the Annotation of a PartyAnnotationCommand class.

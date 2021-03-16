@@ -33,5 +33,5 @@ public @interface FriendAnnotationCommand {
      *
      * @return true if requires argument completion
      */
-    boolean requiresArgumentCompletion();
+    boolean requiresArgumentCompletion() default true;
 }

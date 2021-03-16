@@ -26,7 +26,27 @@ public class SessionManager {
         return this.sessions.getOrDefault(uuid.toString(), null);
     }
 
-    public Session getSession(String name) throws SessionException {
+    public Session getOfflineSession(UUID uuid) throws SessionException {
+        ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+        Session session = null;
+
+        if (player != null) {
+            session = this.getSessionPlayer(player);
+        }
+
+        if (session == null) {
+            session = VicnixFriends.getInstance().getProvider().loadSession(uuid);
+        }
+
+        if (session == null) {
+            throw new SessionException("Session for " + uuid.toString() + " not found");
+        }
+
+        return session;
+    }
+
+    public Session getOfflineSession(String name) throws SessionException {
         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 
         Session session = null;
@@ -53,8 +73,20 @@ public class SessionManager {
             session = new Session(player.getName(), player.getUniqueId());
         }
 
+        ProxyServer.getInstance().getLogger().info("Session opened for " + session.getName());
+
         this.sessions.put(player.getUniqueId().toString(), session);
 
         return session;
+    }
+
+    public void closeSession(ProxiedPlayer player) {
+        Session session = this.getSessionPlayer(player);
+
+        session.intentSave(true);
+
+        ProxyServer.getInstance().getLogger().info("Closing session for " + session.getName());
+
+        this.sessions.remove(player.getUniqueId().toString());
     }
 }
