@@ -1,5 +1,7 @@
 package net.vicnix.friends.command.subcommands;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
@@ -13,7 +15,7 @@ import net.vicnix.friends.translation.Translation;
 @FriendAnnotationCommand(
         name = "add",
         syntax = "/amigos add <jugador>",
-        description = "Enviar solicitud de amigos a un juagdor",
+        description = "Enviar solicitud de amigos a un jugador",
         requiresArgumentCompletion = true
 )
 public class AddSubCommand extends FriendSubCommand {
@@ -22,6 +24,12 @@ public class AddSubCommand extends FriendSubCommand {
     public void execute(ProxiedPlayer player, String[] args) {
         try {
             Session session = SessionManager.getInstance().getSession(args[0]);
+
+            if (session.getUuid().equals(player.getUniqueId())) {
+                session.sendMessage(new ComponentBuilder("No puedes enviarte una solicitud de amistad a ti mismo.").color(ChatColor.RED).create()[0]);
+
+                return;
+            }
 
             if (session.alreadyRequested(player)) {
                 player.sendMessage(new TextComponent(Translation.getInstance().translateString("ALREADY_SENT_FRIEND_REQUEST", session.getName())));

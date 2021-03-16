@@ -12,5 +12,5 @@ public interface IProvider {
 
     Session loadSession(String name);
 
-    Session loadSession(UUID uuid);
+    Session loadSession(UUID uuid, String name);
 }

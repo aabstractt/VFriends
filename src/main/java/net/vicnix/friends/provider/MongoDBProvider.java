@@ -5,7 +5,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.session.Session;
 import org.bson.Document;
@@ -52,14 +51,14 @@ public class MongoDBProvider implements IProvider {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Session loadSession(UUID uuid) {
+    public Session loadSession(UUID uuid, String name) {
         Document document = this.friendsCollection.find(Filters.eq("uuid", uuid.toString())).first();
 
         if (document == null) {
             return null;
         }
 
-        return new Session(document.getString("name"), uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"));
+        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"));
     }
 
     private Document toDocument(Session session) {

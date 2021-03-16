@@ -1,6 +1,8 @@
 package net.vicnix.friends.session;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.ArrayList;
@@ -62,7 +64,13 @@ public class Session {
     public void sendMessage(String message) {
         if (!this.isConnected()) return;
 
-        this.getInstance().sendMessage(message);
+        this.getInstance().sendMessage(new TextComponent(message));
+    }
+
+    public void sendMessage(BaseComponent... baseComponent) {
+        if (!this.isConnected()) return;
+
+        this.getInstance().sendMessage(baseComponent);
     }
 
     public ProxiedPlayer getInstance() {

@@ -46,11 +46,15 @@ public class SessionManager {
         return session;
     }
 
-    public void createSession(ProxiedPlayer player) {
-        Session session = VicnixFriends.getInstance().getProvider().loadSession(player.getUniqueId());
+    public Session createSession(ProxiedPlayer player) {
+        Session session = VicnixFriends.getInstance().getProvider().loadSession(player.getUniqueId(), player.getName());
 
-        if (session == null) session = new Session(player.getName(), player.getUniqueId());
+        if (session == null) {
+            session = new Session(player.getName(), player.getUniqueId());
+        }
 
         this.sessions.put(player.getUniqueId().toString(), session);
+
+        return session;
     }
 }
