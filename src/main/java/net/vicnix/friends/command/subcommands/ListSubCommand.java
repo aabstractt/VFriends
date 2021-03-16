@@ -59,6 +59,8 @@ public class ListSubCommand extends FriendSubCommand {
             }
         }
 
+        if (offline.isEmpty()) return;
+
         session.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_OFFLINE_TEXT")).append(String.join(", ", offline.toArray(new String[0]))).color(ChatColor.RED).create());
     }
 }
