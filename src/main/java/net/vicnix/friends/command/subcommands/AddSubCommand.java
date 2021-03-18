@@ -28,11 +28,11 @@ public class AddSubCommand extends FriendSubCommand {
         try {
             Session target = SessionManager.getInstance().getOfflineSession(args[0]);
 
-            /*if (target.getUniqueId().equals(session.getUniqueId())) {
+            if (target.getUniqueId().equals(session.getUniqueId())) {
                 session.sendMessage(new ComponentBuilder("No puedes enviarte una solicitud de amistad a ti mismo.").color(ChatColor.RED).create()[0]);
 
                 return;
-            }*/
+            }
 
             if (target.alreadyRequested(session.getUniqueId())) {
                 session.sendMessage(new TextComponent(Translation.getInstance().translateString("ALREADY_SENT_FRIEND_REQUEST", session.getName())));
@@ -54,7 +54,7 @@ public class AddSubCommand extends FriendSubCommand {
 
             session.addSentRequest(target);
 
-            session.sendMessage(new TextComponent(Translation.getInstance().translateString("FRIEND_REQUEST_SENT", target.getName())));
+            session.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_SENT", target.getName()));
         } catch (SessionException e) {
             session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
         }

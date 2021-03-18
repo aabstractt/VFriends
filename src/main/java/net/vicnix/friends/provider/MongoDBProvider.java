@@ -1,12 +1,18 @@
 package net.vicnix.friends.provider;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
+import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.session.Session;
 import org.bson.Document;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,11 +22,17 @@ public class MongoDBProvider implements IProvider {
 
     @Override
     public void init() {
-        MongoClient mongoClient = new MongoClient();
+        try {
+            Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(VicnixFriends.getInstance().getDataFolder().getPath(), "config.yml"));
 
-        MongoDatabase database = mongoClient.getDatabase("VicnixFriends");
+            MongoClient mongoClient = new MongoClient(new MongoClientURI(config.getString("mongouri")));
 
-        this.friendsCollection = database.getCollection("friends");
+            MongoDatabase database = mongoClient.getDatabase("VicnixCore");
+
+            this.friendsCollection = database.getCollection("friends");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveSession(Session session) {

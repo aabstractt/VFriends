@@ -65,7 +65,7 @@ public class PendingSubCommand extends FriendSubCommand {
             session.sendMessage(Translation.getInstance().translateString("FRIENDS_PENDING_SENT_LIST", "1", "2"));
 
             if (sentRequests.isEmpty()) {
-                session.sendMessage(new ComponentBuilder("No haz enviado ninguna solicitud de amigos").color(ChatColor.RED).create());
+                session.sendMessage(new ComponentBuilder("No has enviado ninguna solicitud de amigos").color(ChatColor.RED).create());
 
                 return;
             }

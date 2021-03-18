@@ -21,7 +21,7 @@ public class WithdrawSubCommand extends FriendSubCommand {
             Session target = SessionManager.getInstance().getOfflineSession(args[0]);
 
             if (!target.alreadyRequested(session)) {
-                session.sendMessage(new ComponentBuilder("No le haz enviado ninguna solicitud de amistad a este jugador").color(ChatColor.RED).create());
+                session.sendMessage(new ComponentBuilder("No le has enviado ninguna solicitud de amistad a este jugador").color(ChatColor.RED).create());
 
                 return;
             }
@@ -31,9 +31,9 @@ public class WithdrawSubCommand extends FriendSubCommand {
 
             session.removeSentRequest(target);
 
-            session.sendMessage(new ComponentBuilder("Haz cancelado la solicitud de amistad que le has enviado a " + target.getName()).color(ChatColor.GREEN).create());
+            session.sendMessage(new ComponentBuilder("Has cancelado la solicitud de amistad que le has enviado a " + target.getName()).color(ChatColor.GREEN).create());
         } catch (SessionException e) {
-            e.printStackTrace();
+            session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
         }
     }
 }

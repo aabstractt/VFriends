@@ -36,6 +36,8 @@ public class FriendsCommand extends Command implements TabExecutor {
 
         this.registerSubCommand(new WithdrawSubCommand());
         this.registerSubCommand(new WithdrawSubCommand(), "retractar");
+
+        this.registerSubCommand(new ClearSubCommand());
     }
 
     @Override

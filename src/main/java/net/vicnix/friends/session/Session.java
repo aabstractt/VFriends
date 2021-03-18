@@ -7,6 +7,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,6 +66,20 @@ public class Session {
 
     public void removeFriend(UUID uuid) {
         this.friends.remove(uuid.toString());
+    }
+
+    public void removeFriends() throws SessionException {
+        List<String> friends = new ArrayList<>(this.friends);
+
+        for (String uuid : friends) {
+            Session session = SessionManager.getInstance().getOfflineSession(UUID.fromString(uuid));
+
+            session.removeFriend(this);
+
+            session.intentSave();
+        }
+
+        this.friends = new ArrayList<>();
     }
 
     public Boolean isFriend(Session session) {
