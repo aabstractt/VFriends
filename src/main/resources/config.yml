@@ -9,4 +9,21 @@ servers-prefix:
   Creativo: "Creativo"
 server-unknown: "Desconocido"
 
+permissions-session-size:
+  default-party:
+    prefix: "&7{name}"
+    size: 21
+  dev-party:
+    prefix: "&3[DEV] {name}"
+    size: 1000
+  admin-party:
+    prefix: "&c[ADMIN] {name}"
+    size: 1000
+  owner-party:
+    prefix: "&4[DUEÑO] {name}"
+    size: 1000
+  higher-party:
+    prefix: "&c[ADMIN] {name}"
+    size: 1000
+
 mongouri: "mongo"

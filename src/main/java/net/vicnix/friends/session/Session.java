@@ -163,7 +163,7 @@ public class Session {
     }
 
     public ProxiedPlayer getInstance() {
-        return ProxyServer.getInstance().getPlayer(this.name);
+        return ProxyServer.getInstance().getPlayer(this.getUniqueId());
     }
 
     public void intentSave() {

@@ -6,6 +6,7 @@ import net.vicnix.friends.command.FriendReplyCommand;
 import net.vicnix.friends.command.FriendsCommand;
 import net.vicnix.friends.listener.PlayerDisconnectListener;
 import net.vicnix.friends.listener.PostLoginListener;
+import net.vicnix.friends.listener.ServerConnectListener;
 import net.vicnix.friends.provider.IProvider;
 import net.vicnix.friends.provider.MongoDBProvider;
 import net.vicnix.friends.session.Session;
@@ -40,10 +41,11 @@ public class VicnixFriends extends Plugin {
         this.getProxy().getPluginManager().registerCommand(this, new FriendReplyCommand());
 
         this.getProxy().getPluginManager().registerListener(this, new PostLoginListener());
+        this.getProxy().getPluginManager().registerListener(this, new ServerConnectListener());
         this.getProxy().getPluginManager().registerListener(this, new PlayerDisconnectListener());
     }
 
     public Integer getMaxFriendsSlots(Session session) {
-        return 21;
+        return Translation.getInstance().getSessionPermission(session.getInstance()).getSize();
     }
 }

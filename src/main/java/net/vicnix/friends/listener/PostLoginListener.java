@@ -37,7 +37,7 @@ public class PostLoginListener implements Listener {
                 if (player == null) continue;
 
                 player.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_LISTENER_PREFIX"))
-                        .append(session.getName()).color(ChatColor.GRAY)
+                        .append(Translation.getInstance().translatePrefix(session))
                         .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party invite " + session.getName()))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click para enviar invitacion de party").color(ChatColor.GREEN).create()))
                         .append(Translation.getInstance().translateString("FRIEND_JOINED"), ComponentBuilder.FormatRetention.NONE)
