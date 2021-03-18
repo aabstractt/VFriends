@@ -1,6 +1,8 @@
 package net.vicnix.friends;
 
 import net.md_5.bungee.api.plugin.Plugin;
+import net.vicnix.friends.command.FriendMessageCommand;
+import net.vicnix.friends.command.FriendReplyCommand;
 import net.vicnix.friends.command.FriendsCommand;
 import net.vicnix.friends.listener.PlayerDisconnectListener;
 import net.vicnix.friends.listener.PostLoginListener;
@@ -34,6 +36,9 @@ public class VicnixFriends extends Plugin {
         Translation.getInstance().init();
 
         this.getProxy().getPluginManager().registerCommand(this, new FriendsCommand());
+        this.getProxy().getPluginManager().registerCommand(this, new FriendMessageCommand());
+        this.getProxy().getPluginManager().registerCommand(this, new FriendReplyCommand());
+
         this.getProxy().getPluginManager().registerListener(this, new PostLoginListener());
         this.getProxy().getPluginManager().registerListener(this, new PlayerDisconnectListener());
     }

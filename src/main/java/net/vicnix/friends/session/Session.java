@@ -1,8 +1,8 @@
 package net.vicnix.friends.session;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.translation.Translation;
@@ -21,6 +21,8 @@ public class Session {
 
     private List<String> requests = new ArrayList<>();
     private List<String> sentRequests = new ArrayList<>();
+
+    private String lastReplied = null;
 
     public Session(String name, UUID uuid) {
         this.name = name;
@@ -44,20 +46,6 @@ public class Session {
 
     public UUID getUniqueId() {
         return this.uuid;
-    }
-
-    public void acceptFriendRequest(Session target) {
-        this.removeRequest(target);
-        this.addFriend(target);
-
-        target.removeSentRequest(this);
-        target.addFriend(this);
-
-        this.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_ACCEPTED", target.getName()));
-
-        target.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_AS_FRIEND_ACCEPTED", this.getName()));
-
-        target.intentSave();
     }
 
     public List<String> getFriends() {
@@ -152,6 +140,10 @@ public class Session {
         return this.sentRequests.contains(uuid.toString());
     }
 
+    public String getLastReplied() {
+        return this.lastReplied;
+    }
+
     public Boolean isConnected() {
         return this.getInstance() != null;
     }
@@ -186,6 +178,55 @@ public class Session {
         } else {
             ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSession(this));
         }
+    }
+
+    public void acceptFriendRequest(Session target) {
+        this.removeRequest(target);
+        this.addFriend(target);
+
+        target.removeSentRequest(this);
+        target.addFriend(this);
+
+        this.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_ACCEPTED", target.getName()));
+
+        target.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_AS_FRIEND_ACCEPTED", this.getName()));
+
+        target.intentSave();
+    }
+
+    public void friendMessage(Session target, String message) {
+        if (!target.isFriend(this)) {
+            this.sendMessage(new ComponentBuilder("Este jugador no esta en tu lista de amigos").color(ChatColor.RED).create());
+
+            return;
+        }
+
+        if (!target.isConnected()) {
+            this.sendMessage(new ComponentBuilder("Este jugador no esta conectado").color(ChatColor.RED).create());
+
+            return;
+        }
+
+        this.lastReplied = target.getUniqueId().toString();
+        target.lastReplied = this.getUniqueId().toString();
+
+        target.sendMessage(new ComponentBuilder("[Amigos] ").color(ChatColor.YELLOW)
+                .append(this.getName()).color(ChatColor.GRAY)
+                .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/amigos msg " + this.getName()))
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click para enviar un mensaje a " + target.getName()).color(ChatColor.GREEN).create()))
+                .append(" -> ", ComponentBuilder.FormatRetention.NONE).color(ChatColor.LIGHT_PURPLE)
+                .append("Yo: ").color(ChatColor.GRAY)
+                .append(message).color(ChatColor.WHITE)
+                .create()
+        );
+
+        this.sendMessage(new ComponentBuilder("[Amigos] ").color(ChatColor.YELLOW)
+                .append("Yo").color(ChatColor.GRAY)
+                .append(" -> ").color(ChatColor.LIGHT_PURPLE)
+                .append(target.getName() + ": ").color(ChatColor.GRAY)
+                .append(message).color(ChatColor.WHITE)
+                .create()
+        );
     }
 
     @Override
