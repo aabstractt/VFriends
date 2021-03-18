@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
+import net.vicnix.friends.translation.Translation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,20 @@ public class Session {
 
     public UUID getUniqueId() {
         return this.uuid;
+    }
+
+    public void acceptFriendRequest(Session target) {
+        this.removeRequest(target);
+        this.addFriend(target);
+
+        target.removeSentRequest(this);
+        target.addFriend(this);
+
+        this.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_ACCEPTED", target.getName()));
+
+        target.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_AS_FRIEND_ACCEPTED", this.getName()));
+
+        target.intentSave();
     }
 
     public List<String> getFriends() {

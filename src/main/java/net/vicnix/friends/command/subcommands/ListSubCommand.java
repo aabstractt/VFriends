@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
 import net.vicnix.friends.session.Session;
@@ -28,7 +29,7 @@ public class ListSubCommand extends FriendSubCommand {
     public void execute(Session session, String[] args) {
         List<String> friends = session.getFriends();
 
-        session.sendMessage(Translation.getInstance().translateString("FRIENDS_LIST", String.valueOf(friends.size()), "10"));
+        session.sendMessage(Translation.getInstance().translateString("FRIENDS_LIST", String.valueOf(friends.size()), String.valueOf(VicnixFriends.getInstance().getMaxFriendsSlots(session))));
 
         if (friends.isEmpty()) {
             session.sendMessage(Translation.getInstance().translateString("FRIEND_LIST_EMPTY"));

@@ -2,10 +2,11 @@ package net.vicnix.friends;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.vicnix.friends.command.FriendsCommand;
+import net.vicnix.friends.listener.PlayerDisconnectListener;
 import net.vicnix.friends.listener.PostLoginListener;
-import net.vicnix.friends.listener.ServerDisconnectListener;
 import net.vicnix.friends.provider.IProvider;
 import net.vicnix.friends.provider.MongoDBProvider;
+import net.vicnix.friends.session.Session;
 import net.vicnix.friends.translation.Translation;
 
 public class VicnixFriends extends Plugin {
@@ -34,6 +35,10 @@ public class VicnixFriends extends Plugin {
 
         this.getProxy().getPluginManager().registerCommand(this, new FriendsCommand());
         this.getProxy().getPluginManager().registerListener(this, new PostLoginListener());
-        this.getProxy().getPluginManager().registerListener(this, new ServerDisconnectListener());
+        this.getProxy().getPluginManager().registerListener(this, new PlayerDisconnectListener());
+    }
+
+    public Integer getMaxFriendsSlots(Session session) {
+        return 21;
     }
 }

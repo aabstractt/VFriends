@@ -2,9 +2,11 @@ package net.vicnix.friends.command.subcommands;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
 import net.vicnix.friends.session.Session;
@@ -34,6 +36,21 @@ public class AddSubCommand extends FriendSubCommand {
                 return;
             }
 
+            if (session.getFriends().size() >= VicnixFriends.getInstance().getMaxFriendsSlots(session)) {
+                session.sendMessage(new ComponentBuilder("Tu lista de amigos esta totalmente llena, compra un rango mas superior en").color(ChatColor.RED)
+                        .append("\n tienda.vincix.net ").color(ChatColor.GREEN)
+                        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://tienda.vicnix.net"))
+                        .append("para tener mas slots de amigos!").color(ChatColor.RED).create());
+
+                return;
+            }
+
+            if (target.getFriends().size() >= VicnixFriends.getInstance().getMaxFriendsSlots(target)) {
+                session.sendMessage(new ComponentBuilder(target.getName() + " tiene la lista de amigos llena.").color(ChatColor.RED).create());
+
+                return;
+            }
+
             if (target.alreadyRequested(session.getUniqueId())) {
                 session.sendMessage(new TextComponent(Translation.getInstance().translateString("ALREADY_SENT_FRIEND_REQUEST", session.getName())));
 
@@ -42,6 +59,12 @@ public class AddSubCommand extends FriendSubCommand {
 
             if (target.isFriend(session)) {
                 session.sendMessage(new ComponentBuilder("Este jugador ya esta en tu lista de amigos").color(ChatColor.RED).create());
+
+                return;
+            }
+
+            if (session.alreadyRequested(target)) {
+                session.acceptFriendRequest(target);
 
                 return;
             }
