@@ -93,11 +93,14 @@ public class SessionManager {
 
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> {
             for (String uuid : session.getFriends()) {
-                ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
+                Session target = this.getSessionUuid(UUID.fromString(uuid));
 
                 if (target == null) continue;
 
-                target.sendMessage(new TextComponent(Translation.getInstance().translateString("FRIEND_LEFT", session.getName())));
+                if (!target.hasToggleNotifications()) continue;
+
+                target.sendMessage(new TextComponent(Translation.getInstance().translateString("FRIEND_LEFT",
+                        Translation.getInstance().translatePrefix(session))));
             }
 
             session.intentSave(true);

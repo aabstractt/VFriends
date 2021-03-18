@@ -22,6 +22,8 @@ public class Session {
     private List<String> requests = new ArrayList<>();
     private List<String> sentRequests = new ArrayList<>();
 
+    private Boolean toggleNotifications = true;
+
     private String lastReplied = null;
 
     public Session(String name, UUID uuid) {
@@ -30,7 +32,7 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests) {
+    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Boolean toggleNotifications) {
         this(name, uuid);
 
         this.friends = friends;
@@ -38,6 +40,8 @@ public class Session {
         this.requests = requests;
 
         this.sentRequests = sentRequests;
+
+        this.toggleNotifications = toggleNotifications;
     }
 
     public String getName() {
@@ -164,6 +168,14 @@ public class Session {
 
     public ProxiedPlayer getInstance() {
         return ProxyServer.getInstance().getPlayer(this.getUniqueId());
+    }
+
+    public void toggleNotifications(Boolean toggleNotifications) {
+        this.toggleNotifications = toggleNotifications;
+    }
+
+    public Boolean hasToggleNotifications() {
+        return this.toggleNotifications;
     }
 
     public void intentSave() {

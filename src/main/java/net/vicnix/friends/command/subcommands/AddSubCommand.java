@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
@@ -73,7 +74,15 @@ public class AddSubCommand extends FriendSubCommand {
 
             target.intentSave();
 
-            target.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_RECEIVE", session.getName()));
+            target.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', String.format("&e¡&d%s &ete ha &aenviado &euna solicitud de amistad!", session.getName())))
+                    .append(" - ").color(ChatColor.AQUA)
+                    .append("ACEPTAR").color(ChatColor.GREEN).bold(true)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Aceptar la solicitud de amistad").color(ChatColor.GREEN).create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos accept " + session.getName()))
+                    .append(" RECHAZAR").color(ChatColor.RED).bold(true)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Rechazar solicitud de amistad").color(ChatColor.RED).create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos deny " + session.getName()))
+                    .create());
 
             session.addSentRequest(target);
 

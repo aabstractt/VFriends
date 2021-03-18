@@ -42,7 +42,8 @@ public class MongoDBProvider implements IProvider {
                 .append("name", session.getName())
                 .append("friends", session.getFriends())
                 .append("requests", session.getRequests())
-                .append("sentRequests", session.getSentRequests());
+                .append("sentRequests", session.getSentRequests())
+                .append("toggleNotifications", session.hasToggleNotifications());
 
         if (document == null || document.isEmpty()) {
             this.friendsCollection.insertOne(newDocument);
@@ -60,7 +61,7 @@ public class MongoDBProvider implements IProvider {
             return null;
         }
 
-        return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"));
+        return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"), document.getBoolean("toggleNotifications", true));
     }
 
     public Session loadSession(UUID uuid) {
@@ -80,6 +81,6 @@ public class MongoDBProvider implements IProvider {
             name = document.getString("name");
         }
 
-        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"));
+        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"), document.getBoolean("toggleNotifications", true));
     }
 }

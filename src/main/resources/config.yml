@@ -1,7 +1,7 @@
 servers-prefix:
-  Lobby: "el Lobby principal"
-  BWLobby: "el Lobby de BedWars"
-  SWLobby: "el Lobby de SkyWars"
+  Lobby: "Lobby principal"
+  BWLobby: "Lobby de BedWars"
+  SWLobby: "Lobby de SkyWars"
   sw: "SkyWars"
   bw-: "BedWars"
   KB: "Knockback"

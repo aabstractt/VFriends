@@ -1,24 +1,28 @@
 # Add command translations
-ALREADY_SENT_FRIEND_REQUEST: "&cYa le haz enviado una solicitud de amigos a {0}"
-FRIEND_REQUEST_RECEIVE: "&aHaz recibido una nueva solicitud de amigos de {0}"
-FRIEND_REQUEST_SENT: "&aHaz enviado una solicitud de amigos a {0}"
+ALREADY_SENT_FRIEND_REQUEST: "&cYa le has enviado una solicitud de amigos a {0}"
+FRIEND_REQUEST_RECEIVE: "&aHas recibido una nueva solicitud de amigos de {0}"
+FRIEND_REQUEST_SENT: "&aHas enviado una solicitud de amigos a &e{0}"
 
-# Accept command translation
+# Accept command translations
 FRIEND_REQUEST_NOT_FOUND: "No tienes ninguna solicitud de amigos pendiente de este jugador."
-FRIEND_REQUEST_AS_FRIEND_ACCEPTED: "&a{0} acepto tu solicitud de amigos!"
-FRIEND_REQUEST_ACCEPTED: "&aAceptaste la solicitud de amigos de {0}"
+FRIEND_REQUEST_AS_FRIEND_ACCEPTED: "&d{0} &eacepto tu solicitud de amigos!"
+FRIEND_REQUEST_ACCEPTED: "&aAceptaste la solicitud de amigos de &d{0}"
+
+# Deny command translations
+FRIEND_REQUEST_DENIED: "&aRechazaste la solicitud de amigos de &d{0}"
+FRIEND_REQUEST_AS_FRIEND_DENIED: "&d{0} &arechazo tu solicitud de amigos."
 
 # List command translations
 FRIENDS_LIST: "&d--------- &e&lAmigos&r &7({0}/{1}) &d---------"
 FRIEND_LIST_EMPTY: "&cTu lista de amigos esta vacia"
 FRIEND_ONLINE_HOVER: "&a{0}"
 FRIEND_ONLINE_HOVER_TEXT: "&aClick para mandar un mensaje a {0}"
-FRIEND_ONLINE: " &f- &7esta conectado en {0}"
+FRIEND_ONLINE: " &7está conectado en &d{0}"
 FRIEND_OFFLINE_TEXT: "&7Desconectados:\n"
 
 # Remove command translations
-FRIEND_REMOVED_YOU: "&c{0} te ha eliminado de su lista de amigos"
-FRIEND_REMOVED: "&aHaz eliminado a {0} de tu lista de amigos"
+FRIEND_REMOVED_YOU: "&d{0} &ate ha eliminado de su lista de amigos"
+FRIEND_REMOVED: "&aHas eliminado a &e{0} &ade tu lista de amigos"
 
 # Pending command translations
 FRIENDS_PENDING_LIST: "&d--------- &e&lSolicitudes de amigo&r &7({0}) &d---------"
@@ -26,5 +30,5 @@ FRIENDS_PENDING_SENT_LIST: "&d--------- &e&lSolicitudes de amigo enviadas&r &7({
 
 # Listener translations
 FRIEND_LISTENER_PREFIX: "&eAmigos > "
-FRIEND_JOINED: " &ase ha unido."
-FRIEND_LEFT: "&eAmigos > &7{0} &ase ha ido."
+FRIEND_JOINED: " &ase ha unido a la network."
+FRIEND_LEFT: "&eAmigos > &d{0} &ase ha ido de la network."

@@ -32,11 +32,13 @@ public class PostLoginListener implements Listener {
             }
 
             for (String uuid : session.getFriends()) {
-                ProxiedPlayer player = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
+                Session target = SessionManager.getInstance().getSessionUuid(UUID.fromString(uuid));
 
-                if (player == null) continue;
+                if (target == null) continue;
 
-                player.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_LISTENER_PREFIX"))
+                if (!target.hasToggleNotifications()) continue;
+
+                target.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_LISTENER_PREFIX"))
                         .append(Translation.getInstance().translatePrefix(session))
                         .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party invite " + session.getName()))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click para enviar invitacion de party").color(ChatColor.GREEN).create()))

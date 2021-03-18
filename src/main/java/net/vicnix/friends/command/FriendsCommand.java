@@ -29,6 +29,8 @@ public class FriendsCommand extends Command implements TabExecutor {
         this.registerSubCommand(new ListSubCommand());
         this.registerSubCommand(new ListSubCommand(), "lista");
 
+        this.registerSubCommand(new DenySubCommand());
+
         this.registerSubCommand(new RemoveSubCommand());
         this.registerSubCommand(new RemoveSubCommand(), "eliminar");
 
@@ -41,6 +43,8 @@ public class FriendsCommand extends Command implements TabExecutor {
 
         this.registerSubCommand(new MessageSubCommand());
         this.registerSubCommand(new MessageSubCommand(), "msg");
+
+        this.registerSubCommand(new NotificationsSubCommand());
     }
 
     @Override
