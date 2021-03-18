@@ -52,7 +52,7 @@ public class AddSubCommand extends FriendSubCommand {
             }
 
             if (target.alreadyRequested(session.getUniqueId())) {
-                session.sendMessage(new TextComponent(Translation.getInstance().translateString("ALREADY_SENT_FRIEND_REQUEST", session.getName())));
+                session.sendMessage(new TextComponent(Translation.getInstance().translateString("ALREADY_SENT_FRIEND_REQUEST", target.getName())));
 
                 return;
             }

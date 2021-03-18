@@ -31,7 +31,7 @@ public class PendingSubCommand extends FriendSubCommand {
         if (args[0].equalsIgnoreCase("requests")) {
             List<String> requests = session.getRequests();
 
-            session.sendMessage(Translation.getInstance().translateString("FRIENDS_PENDING_LIST", "1", "2"));
+            session.sendMessage(Translation.getInstance().translateString("FRIENDS_PENDING_LIST", String.valueOf(requests.size())));
 
             if (requests.isEmpty()) {
                 session.sendMessage(new ComponentBuilder("No tienes ninguna solicitud de amistad pendiente").color(ChatColor.RED).create());
@@ -62,7 +62,7 @@ public class PendingSubCommand extends FriendSubCommand {
         } else if (args[0].equalsIgnoreCase("sent")) {
             List<String> sentRequests = session.getSentRequests();
 
-            session.sendMessage(Translation.getInstance().translateString("FRIENDS_PENDING_SENT_LIST", "1", "2"));
+            session.sendMessage(Translation.getInstance().translateString("FRIENDS_PENDING_SENT_LIST", String.valueOf(sentRequests.size())));
 
             if (sentRequests.isEmpty()) {
                 session.sendMessage(new ComponentBuilder("No has enviado ninguna solicitud de amigos").color(ChatColor.RED).create());
