@@ -4,7 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ServerConnectedEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -15,10 +15,10 @@ import net.vicnix.friends.translation.Translation;
 
 import java.util.UUID;
 
-public class ServerConnectedListener implements Listener {
+public class PostLoginListener implements Listener {
 
     @EventHandler (priority = EventPriority.NORMAL)
-    public void onServerConnectedEvent(ServerConnectedEvent ev) {
+    public void onServerConnectedEvent(PostLoginEvent ev) {
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> {
             Session session = SessionManager.getInstance().createSession(ev.getPlayer());
 

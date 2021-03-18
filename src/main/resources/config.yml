@@ -8,3 +8,5 @@ servers-prefix:
   SkyBlock: "SkyBlock"
   Creativo: "Creativo"
 server-unknown: "Desconocido"
+
+mongouri: "mongo"

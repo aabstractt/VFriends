@@ -85,6 +85,12 @@ public class SessionManager {
     public void closeSession(ProxiedPlayer player) {
         Session session = this.getSessionPlayer(player);
 
+        if (session == null) {
+            ProxyServer.getInstance().getLogger().info("Session for " + player.getName() + " not found.");
+
+            return;
+        }
+
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> {
             for (String uuid : session.getFriends()) {
                 ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
