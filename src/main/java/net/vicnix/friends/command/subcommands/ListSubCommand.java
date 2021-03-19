@@ -1,10 +1,7 @@
 package net.vicnix.friends.command.subcommands;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
@@ -51,6 +48,7 @@ public class ListSubCommand extends FriendSubCommand {
 
                 session.sendMessage(new ComponentBuilder(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER", target.getName()))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER_TEXT", target.getName()))}))
+                        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/fmsg " + target.getName()))
                         .append(Translation.getInstance().translateString("FRIEND_ONLINE", Translation.getInstance().translateServerPrefix(target.getInstance().getServer().getInfo())), ComponentBuilder.FormatRetention.NONE)
                         .create());
             } catch (SessionException e) {

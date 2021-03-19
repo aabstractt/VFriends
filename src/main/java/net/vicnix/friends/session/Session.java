@@ -157,7 +157,7 @@ public class Session {
 
         if (message.isEmpty()) return;
 
-        this.getInstance().sendMessage(new TextComponent(message));
+        this.sendMessage(new TextComponent(message));
     }
 
     public void sendMessage(BaseComponent... baseComponent) {
