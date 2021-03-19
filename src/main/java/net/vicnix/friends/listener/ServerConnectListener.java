@@ -33,7 +33,8 @@ public class ServerConnectListener implements Listener {
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos pending requests"))
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(ChatColor.GREEN + "Click para ver las solicitudes pendientes.")}))
                     .append("para ver las peticiones.", ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
-                    .create());
+                    .create()
+            );
         }
     }
 }

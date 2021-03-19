@@ -9,7 +9,7 @@ import net.vicnix.friends.session.SessionManager;
 public class PlayerDisconnectListener implements Listener {
 
     @EventHandler (priority = EventPriority.NORMAL)
-    public void onServerDisconnectEvent(PlayerDisconnectEvent ev) {
+    public void onPlayerDisconnectEvent(PlayerDisconnectEvent ev) {
         SessionManager.getInstance().closeSession(ev.getPlayer());
     }
 }

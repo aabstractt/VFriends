@@ -10,6 +10,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.session.Session;
+import net.vicnix.friends.translation.Translation;
 import org.bson.Document;
 
 import java.io.File;
@@ -43,6 +44,7 @@ public class MongoDBProvider implements IProvider {
                 .append("friends", session.getFriends())
                 .append("requests", session.getRequests())
                 .append("sentRequests", session.getSentRequests())
+                .append("maxFriendsSlots", session.getMaxFriendsSlots())
                 .append("toggleNotifications", session.hasToggleNotifications());
 
         if (document == null || document.isEmpty()) {
@@ -61,7 +63,15 @@ public class MongoDBProvider implements IProvider {
             return null;
         }
 
-        return new Session(document.getString("name"), UUID.fromString(document.getString("uuid")), (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"), document.getBoolean("toggleNotifications", true));
+        return new Session(
+                document.getString("name"),
+                UUID.fromString(document.getString("uuid")),
+                (List<String>)document.get("friends"),
+                (List<String>)document.get("requests"),
+                (List<String>)document.get("sentRequests"),
+                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
+                document.getBoolean("toggleNotifications", true)
+        );
     }
 
     public Session loadSession(UUID uuid) {
@@ -81,6 +91,14 @@ public class MongoDBProvider implements IProvider {
             name = document.getString("name");
         }
 
-        return new Session(name, uuid, (List<String>)document.get("friends"), (List<String>)document.get("requests"), (List<String>)document.get("sentRequests"), document.getBoolean("toggleNotifications", true));
+        return new Session(
+                name,
+                uuid,
+                (List<String>)document.get("friends"),
+                (List<String>)document.get("requests"),
+                (List<String>)document.get("sentRequests"),
+                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
+                document.getBoolean("toggleNotifications", true)
+        );
     }
 }

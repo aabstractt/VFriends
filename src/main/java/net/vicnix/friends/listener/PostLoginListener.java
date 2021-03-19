@@ -2,8 +2,11 @@ package net.vicnix.friends.listener;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.*;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -18,7 +21,7 @@ import java.util.UUID;
 public class PostLoginListener implements Listener {
 
     @EventHandler (priority = EventPriority.NORMAL)
-    public void onServerConnectedEvent(PostLoginEvent ev) {
+    public void onPostLoginEvent(PostLoginEvent ev) {
         ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> {
             Session session = SessionManager.getInstance().createSession(ev.getPlayer());
 
@@ -28,7 +31,8 @@ public class PostLoginListener implements Listener {
                         .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos pending requests"))
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(ChatColor.GREEN + "Click para ver las solicitudes pendientes.")}))
                         .append("para ver las peticiones.", ComponentBuilder.FormatRetention.NONE).color(ChatColor.GREEN)
-                        .create());
+                        .create()
+                );
             }
 
             for (String uuid : session.getFriends()) {

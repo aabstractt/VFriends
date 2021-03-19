@@ -2,7 +2,6 @@ package net.vicnix.friends.command.subcommands;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
-import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
 import net.vicnix.friends.session.Session;
@@ -26,7 +25,7 @@ public class ListSubCommand extends FriendSubCommand {
     public void execute(Session session, String[] args) {
         List<String> friends = session.getFriends();
 
-        session.sendMessage(Translation.getInstance().translateString("FRIENDS_LIST", String.valueOf(friends.size()), String.valueOf(VicnixFriends.getInstance().getMaxFriendsSlots(session))));
+        session.sendMessage(Translation.getInstance().translateString("FRIENDS_LIST", String.valueOf(friends.size()), String.valueOf(session.getMaxFriendsSlots())));
 
         if (friends.isEmpty()) {
             session.sendMessage(Translation.getInstance().translateString("FRIEND_LIST_EMPTY"));
@@ -50,7 +49,8 @@ public class ListSubCommand extends FriendSubCommand {
                         .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Translation.getInstance().translateString("FRIEND_ONLINE_HOVER_TEXT", target.getName()))}))
                         .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/fmsg " + target.getName()))
                         .append(Translation.getInstance().translateString("FRIEND_ONLINE", Translation.getInstance().translateServerPrefix(target.getInstance().getServer().getInfo())), ComponentBuilder.FormatRetention.NONE)
-                        .create());
+                        .create()
+                );
             } catch (SessionException e) {
                 session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
 

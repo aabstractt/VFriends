@@ -7,7 +7,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
 import net.vicnix.friends.session.Session;
@@ -37,7 +36,7 @@ public class AddSubCommand extends FriendSubCommand {
                 return;
             }
 
-            if (session.getFriends().size() >= VicnixFriends.getInstance().getMaxFriendsSlots(session)) {
+            if (session.getFriends().size() >= session.getMaxFriendsSlots()) {
                 session.sendMessage(new ComponentBuilder("Tu lista de amigos esta totalmente llena, compra un rango mas superior en").color(ChatColor.RED)
                         .append("\n tienda.vincix.net ").color(ChatColor.GREEN)
                         .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://tienda.vicnix.net"))
@@ -46,7 +45,7 @@ public class AddSubCommand extends FriendSubCommand {
                 return;
             }
 
-            if (target.getFriends().size() >= VicnixFriends.getInstance().getMaxFriendsSlots(target)) {
+            if (target.getFriends().size() >= target.getMaxFriendsSlots()) {
                 session.sendMessage(new ComponentBuilder(target.getName() + " tiene la lista de amigos llena.").color(ChatColor.RED).create());
 
                 return;
@@ -79,7 +78,8 @@ public class AddSubCommand extends FriendSubCommand {
                     .append("ACEPTAR").color(ChatColor.GREEN).bold(true)
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Aceptar la solicitud de amistad").color(ChatColor.GREEN).create()))
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos accept " + session.getName()))
-                    .append(" RECHAZAR").color(ChatColor.RED).bold(true)
+                    .append(" | ", ComponentBuilder.FormatRetention.NONE).color(ChatColor.DARK_GRAY).bold(true)
+                    .append("RECHAZAR").color(ChatColor.RED).bold(true)
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Rechazar solicitud de amistad").color(ChatColor.RED).create()))
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos deny " + session.getName()))
                     .create());

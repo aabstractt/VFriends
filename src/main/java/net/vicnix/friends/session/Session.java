@@ -22,6 +22,8 @@ public class Session {
     private List<String> requests = new ArrayList<>();
     private List<String> sentRequests = new ArrayList<>();
 
+    private Integer maxFriendsSlots = 0;
+
     private Boolean toggleNotifications = true;
 
     private String lastReplied = null;
@@ -32,7 +34,7 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Boolean toggleNotifications) {
+    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Integer maxFriendsSlots, Boolean toggleNotifications) {
         this(name, uuid);
 
         this.friends = friends;
@@ -40,6 +42,8 @@ public class Session {
         this.requests = requests;
 
         this.sentRequests = sentRequests;
+
+        this.maxFriendsSlots = maxFriendsSlots;
 
         this.toggleNotifications = toggleNotifications;
     }
@@ -50,6 +54,14 @@ public class Session {
 
     public UUID getUniqueId() {
         return this.uuid;
+    }
+
+    public Integer getMaxFriendsSlots() {
+        if (this.isConnected()) {
+            return VicnixFriends.getInstance().getMaxFriendsSlots(this);
+        }
+
+        return this.maxFriendsSlots;
     }
 
     public List<String> getFriends() {
