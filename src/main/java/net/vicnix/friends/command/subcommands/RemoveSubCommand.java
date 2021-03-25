@@ -33,7 +33,7 @@ public class RemoveSubCommand extends FriendSubCommand {
             session.removeFriend(target);
 
             session.sendMessage(Translation.getInstance().translateString("FRIEND_REMOVED", target.getName()));
-            target.sendMessage(Translation.getInstance().translateString("FRIEND_REMOVED_YOU", target.getName()));
+            target.sendMessage(Translation.getInstance().translateString("FRIEND_REMOVED_YOU", session.getName()));
         } catch (SessionException e) {
             session.sendMessage(new ComponentBuilder(e.getMessage()).color(ChatColor.RED).create());
         }

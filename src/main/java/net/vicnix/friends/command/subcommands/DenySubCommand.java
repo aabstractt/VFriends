@@ -34,10 +34,8 @@ public class DenySubCommand extends FriendSubCommand {
             }
 
             session.removeRequest(target);
-            session.addFriend(target);
 
             target.removeSentRequest(session);
-            target.addFriend(session);
 
             session.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_DENIED", target.getName()));
 
