@@ -45,6 +45,7 @@ public class MongoDBProvider implements IProvider {
                 .append("requests", session.getRequests())
                 .append("sentRequests", session.getSentRequests())
                 .append("maxFriendsSlots", session.getMaxFriendsSlots())
+                .append("toggleRequests", session.hasToggleRequests())
                 .append("toggleNotifications", session.hasToggleNotifications());
 
         if (document == null || document.isEmpty()) {
@@ -70,6 +71,7 @@ public class MongoDBProvider implements IProvider {
                 (List<String>)document.get("requests"),
                 (List<String>)document.get("sentRequests"),
                 document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
+                document.getBoolean("toggleRequests", false),
                 document.getBoolean("toggleNotifications", true)
         );
     }
@@ -98,6 +100,7 @@ public class MongoDBProvider implements IProvider {
                 (List<String>)document.get("requests"),
                 (List<String>)document.get("sentRequests"),
                 document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
+                document.getBoolean("toggleRequests", false),
                 document.getBoolean("toggleNotifications", true)
         );
     }

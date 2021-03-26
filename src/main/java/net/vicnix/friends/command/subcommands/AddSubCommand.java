@@ -36,6 +36,12 @@ public class AddSubCommand extends FriendSubCommand {
                 return;
             }
 
+            if (!target.hasToggleRequests()) {
+                session.sendMessage(new ComponentBuilder("No puedes enviarle solicitudes de amistad a este usuario").color(ChatColor.RED).create());
+
+                return;
+            }
+
             if (session.getFriends().size() >= session.getMaxFriendsSlots()) {
                 session.sendMessage(new ComponentBuilder("Tu lista de amigos esta totalmente llena, compra un rango mas superior en").color(ChatColor.RED)
                         .append("\n tienda.vincix.net ").color(ChatColor.GREEN)

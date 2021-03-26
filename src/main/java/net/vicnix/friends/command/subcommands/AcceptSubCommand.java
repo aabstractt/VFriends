@@ -29,7 +29,7 @@ public class AcceptSubCommand extends FriendSubCommand {
         try {
             Session target = SessionManager.getInstance().getOfflineSession(args[0]);
 
-            if (target.getUniqueId().equals(session.getUniqueId())) {
+            if (target.getUniqueId().equals(session.getUniqueId()) || !target.hasToggleRequests()) {
                 session.sendMessage(new ComponentBuilder("No puedes aceptar esta solicitud.").color(ChatColor.RED).create()[0]);
 
                 return;

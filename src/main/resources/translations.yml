@@ -25,7 +25,7 @@ FRIEND_REMOVED_YOU: "&d{0} &ate ha eliminado de su lista de amigos"
 FRIEND_REMOVED: "&aHas eliminado a &e{0} &ade tu lista de amigos"
 
 # Pending command translations
-FRIENDS_PENDING_LIST: "&d--------- &e&lSolicitudes de amigo&r &7({0}) &d---------"
+FRIENDS_PENDING_LIST: "&d--------- &e&lSolicitudes de amigo&r &7({0}/{1}) &d---------"
 FRIENDS_PENDING_SENT_LIST: "&d--------- &e&lSolicitudes de amigo enviadas&r &7({0}) &d---------"
 
 # Listener translations

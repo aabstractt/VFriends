@@ -45,6 +45,8 @@ public class FriendsCommand extends Command implements TabExecutor {
         this.registerSubCommand(new MessageSubCommand(), "msg");
 
         this.registerSubCommand(new NotificationsSubCommand());
+
+        this.registerSubCommand(new DisableSubCommand());
     }
 
     @Override

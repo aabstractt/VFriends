@@ -24,6 +24,7 @@ public class Session {
 
     private Integer maxFriendsSlots = 0;
 
+    private Boolean toggleRequests = true;
     private Boolean toggleNotifications = true;
 
     private String lastReplied = null;
@@ -34,7 +35,7 @@ public class Session {
         this.uuid = uuid;
     }
 
-    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Integer maxFriendsSlots, Boolean toggleNotifications) {
+    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Integer maxFriendsSlots, Boolean toggleRequests, Boolean toggleNotifications) {
         this(name, uuid);
 
         this.friends = friends;
@@ -44,6 +45,8 @@ public class Session {
         this.sentRequests = sentRequests;
 
         this.maxFriendsSlots = maxFriendsSlots;
+
+        this.toggleRequests = toggleRequests;
 
         this.toggleNotifications = toggleNotifications;
     }
@@ -180,6 +183,14 @@ public class Session {
 
     public ProxiedPlayer getInstance() {
         return ProxyServer.getInstance().getPlayer(this.getUniqueId());
+    }
+
+    public void toggleRequests(Boolean toggleRequests) {
+        this.toggleRequests = toggleRequests;
+    }
+
+    public Boolean hasToggleRequests() {
+        return this.toggleRequests;
     }
 
     public void toggleNotifications(Boolean toggleNotifications) {
