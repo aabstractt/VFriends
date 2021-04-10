@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.translation.Translation;
+import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,10 +209,12 @@ public class Session {
     public void intentSave(Boolean force) {
         if (this.isConnected() && !force) return;
 
+        Document document = this.toDocument();
+
         if (force) {
-            VicnixFriends.getInstance().getProvider().saveSession(this);
+            VicnixFriends.getInstance().getProvider().saveSession(this.getUniqueId(), document);
         } else {
-            ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSession(this));
+            ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSession(this.getUniqueId(), document));
         }
     }
 
@@ -262,6 +265,17 @@ public class Session {
                 .append(message).color(ChatColor.WHITE)
                 .create()
         );
+    }
+
+    public Document toDocument() {
+        return new Document("uuid", this.getUniqueId().toString())
+                .append("name", this.getName())
+                .append("friends", this.getFriends())
+                .append("requests", this.getRequests())
+                .append("sentRequests", this.getSentRequests())
+                .append("maxFriendsSlots", this.getMaxFriendsSlots())
+                .append("toggleRequests", this.hasToggleRequests())
+                .append("toggleNotifications", this.hasToggleNotifications());
     }
 
     @Override

@@ -26,7 +26,7 @@ public class MongoDBProvider implements IProvider {
         try {
             Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(VicnixFriends.getInstance().getDataFolder().getPath(), "config.yml"));
 
-            MongoClient mongoClient = new MongoClient(new MongoClientURI(config.getString("mongouri")));
+            MongoClient mongoClient = new MongoClient();//new MongoClientURI(config.getString("mongouri")));
 
             MongoDatabase database = mongoClient.getDatabase("VicnixCore");
 
@@ -36,22 +36,13 @@ public class MongoDBProvider implements IProvider {
         }
     }
 
-    public void saveSession(Session session) {
-        Document document = this.friendsCollection.find(Filters.eq("uuid", session.getUniqueId().toString())).first();
-
-        Document newDocument = new Document("uuid", session.getUniqueId().toString())
-                .append("name", session.getName())
-                .append("friends", session.getFriends())
-                .append("requests", session.getRequests())
-                .append("sentRequests", session.getSentRequests())
-                .append("maxFriendsSlots", session.getMaxFriendsSlots())
-                .append("toggleRequests", session.hasToggleRequests())
-                .append("toggleNotifications", session.hasToggleNotifications());
+    public void saveSession(UUID uuid, Document newDocument) {
+        Document document = this.friendsCollection.find(Filters.eq("uuid", uuid.toString())).first();
 
         if (document == null || document.isEmpty()) {
             this.friendsCollection.insertOne(newDocument);
         } else {
-            this.friendsCollection.findOneAndReplace(Filters.eq("uuid", session.getUniqueId().toString()), newDocument);
+            this.friendsCollection.findOneAndReplace(Filters.eq("uuid", uuid.toString()), newDocument);
         }
     }
 
@@ -70,8 +61,8 @@ public class MongoDBProvider implements IProvider {
                 (List<String>)document.get("friends"),
                 (List<String>)document.get("requests"),
                 (List<String>)document.get("sentRequests"),
-                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
-                document.getBoolean("toggleRequests", false),
+                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission().getSize()),
+                document.getBoolean("toggleRequests", true),
                 document.getBoolean("toggleNotifications", true)
         );
     }
@@ -99,8 +90,8 @@ public class MongoDBProvider implements IProvider {
                 (List<String>)document.get("friends"),
                 (List<String>)document.get("requests"),
                 (List<String>)document.get("sentRequests"),
-                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission(null).getSize()),
-                document.getBoolean("toggleRequests", false),
+                document.getInteger("maxFriendsSlots", Translation.getInstance().getSessionPermission().getSize()),
+                document.getBoolean("toggleRequests", true),
                 document.getBoolean("toggleNotifications", true)
         );
     }

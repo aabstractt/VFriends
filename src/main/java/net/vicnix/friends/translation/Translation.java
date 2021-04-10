@@ -81,6 +81,10 @@ public class Translation {
         return "Unknown";
     }
 
+    public SessionPermission getSessionPermission() {
+        return this.getSessionPermission(null);
+    }
+
     public SessionPermission getSessionPermission(ProxiedPlayer player) {
         SessionPermission betterSessionPermission = this.sessionPermissionMap.get("default-party");
 
