@@ -108,9 +108,13 @@ public class Translation {
     }
 
     public String translatePrefix(Session session) {
-        SessionPermission sessionPermission = this.getSessionPermission(session.getInstance());
+        return this.translatePrefix(session.getInstance());
+    }
 
-        return ChatColor.translateAlternateColorCodes('&', sessionPermission.getPrefix().replace("{name}", session.getName()));
+    public String translatePrefix(ProxiedPlayer player) {
+        SessionPermission sessionPermission = this.getSessionPermission(player);
+
+        return ChatColor.translateAlternateColorCodes('&', sessionPermission.getPrefix().replace("{name}", player.getName()));
     }
 
     @SuppressWarnings({"UnstableApiUsage", "ResultOfMethodCallIgnored"})

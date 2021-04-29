@@ -1,7 +1,6 @@
 package net.vicnix.friends.provider;
 
-import net.vicnix.friends.session.Session;
-import org.bson.Document;
+import net.vicnix.friends.session.SessionStorage;
 
 import java.util.UUID;
 
@@ -9,11 +8,11 @@ public interface IProvider {
 
     void init();
 
-    void saveSession(UUID uuid, Document newDocument);
+    void saveSessionStorage(SessionStorage sessionStorage, Integer friendsSlots);
 
-    Session loadSession(String name);
+    SessionStorage loadSessionStorage(String name);
 
-    Session loadSession(UUID uuid);
+    SessionStorage loadSessionStorage(UUID uuid);
 
-    Session loadSession(UUID uuid, String name);
+    SessionStorage loadSessionStorage(UUID uuid, String name);
 }

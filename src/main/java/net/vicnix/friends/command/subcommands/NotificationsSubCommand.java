@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.vicnix.friends.command.FriendAnnotationCommand;
 import net.vicnix.friends.command.FriendSubCommand;
 import net.vicnix.friends.session.Session;
+import net.vicnix.friends.session.SessionStorage;
 
 @FriendAnnotationCommand(
         name = "notifications",
@@ -16,8 +17,10 @@ public class NotificationsSubCommand extends FriendSubCommand {
 
     @Override
     public void execute(Session session, String[] args) {
-        session.toggleNotifications(!session.hasToggleNotifications());
+        SessionStorage sessionStorage = session.getSessionStorage();
 
-        session.sendMessage(new ComponentBuilder(String.format("Te has %s las notificaciones de cuando un amigo se conecta!", session.hasToggleNotifications() ? "activado" : "desactivado")).color(ChatColor.GOLD).create());
+        sessionStorage.toggleNotifications(!sessionStorage.hasToggleNotifications());
+
+        session.sendMessage(new ComponentBuilder(String.format("Te has %s las notificaciones de cuando un amigo se conecta!", sessionStorage.hasToggleNotifications() ? "activado" : "desactivado")).color(ChatColor.GOLD).create());
     }
 }

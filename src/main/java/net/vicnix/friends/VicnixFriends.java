@@ -30,11 +30,11 @@ public class VicnixFriends extends Plugin {
     public void onEnable() {
         instance = this;
 
+        Translation.getInstance().init();
+
         this.provider = new MongoDBProvider();
 
         this.provider.init();
-
-        Translation.getInstance().init();
 
         this.getProxy().getPluginManager().registerCommand(this, new FriendsCommand());
         this.getProxy().getPluginManager().registerCommand(this, new FriendMessageCommand());

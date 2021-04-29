@@ -27,7 +27,7 @@ public class ServerConnectListener implements Listener {
             return;
         }
 
-        if (!session.getRequests().isEmpty()) {
+        if (!session.getSessionStorage().getRequests().isEmpty()) {
             session.sendMessage(new ComponentBuilder("Tienes solicitudes de amistad pendientes! Click").color(ChatColor.GREEN)
                     .append(" AQUÍ ").color(ChatColor.LIGHT_PURPLE).bold(true)
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/amigos pending requests"))

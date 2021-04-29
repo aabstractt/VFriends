@@ -46,7 +46,7 @@ public class FriendReplyCommand extends Command {
             return;
         }
 
-        Session target = SessionManager.getInstance().getSessionUuid(UUID.fromString(session.getLastReplied()));
+        Session target = SessionManager.getInstance().getSessionUuid(session.getLastReplied());
 
         if (target == null) {
             session.sendMessage(new ComponentBuilder("Jugador no encontrado").color(ChatColor.RED).create());

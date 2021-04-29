@@ -6,58 +6,25 @@ import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.vicnix.friends.VicnixFriends;
 import net.vicnix.friends.translation.Translation;
-import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Session {
 
-    private final String name;
+    private UUID lastReplied = null;
 
-    private final UUID uuid;
+    private final SessionStorage sessionStorage;
 
-    private List<String> friends = new ArrayList<>();
-
-    private List<String> requests = new ArrayList<>();
-    private List<String> sentRequests = new ArrayList<>();
-
-    private Integer maxFriendsSlots = 0;
-
-    private Boolean toggleRequests = true;
-    private Boolean toggleNotifications = true;
-
-    private String lastReplied = null;
-
-    public Session(String name, UUID uuid) {
-        this.name = name;
-
-        this.uuid = uuid;
-    }
-
-    public Session(String name, UUID uuid, List<String> friends, List<String> requests, List<String> sentRequests, Integer maxFriendsSlots, Boolean toggleRequests, Boolean toggleNotifications) {
-        this(name, uuid);
-
-        this.friends = friends;
-
-        this.requests = requests;
-
-        this.sentRequests = sentRequests;
-
-        this.maxFriendsSlots = maxFriendsSlots;
-
-        this.toggleRequests = toggleRequests;
-
-        this.toggleNotifications = toggleNotifications;
+    public Session(SessionStorage sessionStorage) {
+        this.sessionStorage = sessionStorage;
     }
 
     public String getName() {
-        return this.name;
+        return this.sessionStorage.getName();
     }
 
     public UUID getUniqueId() {
-        return this.uuid;
+        return this.sessionStorage.getUniqueId();
     }
 
     public Integer getMaxFriendsSlots() {
@@ -65,102 +32,14 @@ public class Session {
             return VicnixFriends.getInstance().getMaxFriendsSlots(this);
         }
 
-        return this.maxFriendsSlots;
+        return this.sessionStorage.maxFriendsSlots;
     }
 
-    public List<String> getFriends() {
-        return this.friends;
+    public SessionStorage getSessionStorage() {
+        return this.sessionStorage;
     }
 
-    public void addFriend(Session session) {
-        this.addFriend(session.getUniqueId());
-    }
-
-    public void addFriend(UUID uuid) {
-        if (this.isFriend(uuid)) return;
-
-        this.friends.add(uuid.toString());
-    }
-
-    public void removeFriend(Session session) {
-        this.removeFriend(session.getUniqueId());
-    }
-
-    public void removeFriend(UUID uuid) {
-        this.friends.remove(uuid.toString());
-    }
-
-    public void removeFriends() throws SessionException {
-        List<String> friends = new ArrayList<>(this.friends);
-
-        for (String uuid : friends) {
-            Session session = SessionManager.getInstance().getOfflineSession(UUID.fromString(uuid));
-
-            session.removeFriend(this);
-
-            session.intentSave();
-        }
-
-        this.friends = new ArrayList<>();
-    }
-
-    public Boolean isFriend(Session session) {
-        return this.isFriend(session.getUniqueId());
-    }
-
-    public Boolean isFriend(UUID uuid) {
-        return this.friends.contains(uuid.toString());
-    }
-
-    public List<String> getRequests() {
-        return this.requests;
-    }
-
-    public void addRequest(Session session) {
-        this.addRequest(session.getUniqueId());
-    }
-
-    public void addRequest(UUID uuid) {
-        this.requests.add(uuid.toString());
-    }
-
-    public void removeRequest(Session session) {
-        this.removeRequest(session.getUniqueId());
-    }
-
-    public void removeRequest(UUID uuid) {
-        this.requests.remove(uuid.toString());
-    }
-
-    public Boolean alreadyRequested(Session session) {
-        return this.alreadyRequested(session.getUniqueId());
-    }
-
-    public Boolean alreadyRequested(UUID uuid) {
-        return this.requests.contains(uuid.toString());
-    }
-
-    public List<String> getSentRequests() {
-        return sentRequests;
-    }
-
-    public void addSentRequest(Session session) {
-        if (this.alreadySentRequest(session.getUniqueId())) return;
-
-        this.sentRequests.add(session.getUniqueId().toString());
-    }
-
-    public void removeSentRequest(Session session) {
-        if (!this.alreadySentRequest(session.getUniqueId())) return;
-
-        this.sentRequests.remove(session.getUniqueId().toString());
-    }
-
-    public Boolean alreadySentRequest(UUID uuid) {
-        return this.sentRequests.contains(uuid.toString());
-    }
-
-    public String getLastReplied() {
+    public UUID getLastReplied() {
         return this.lastReplied;
     }
 
@@ -186,54 +65,23 @@ public class Session {
         return ProxyServer.getInstance().getPlayer(this.getUniqueId());
     }
 
-    public void toggleRequests(Boolean toggleRequests) {
-        this.toggleRequests = toggleRequests;
-    }
-
-    public Boolean hasToggleRequests() {
-        return this.toggleRequests;
-    }
-
-    public void toggleNotifications(Boolean toggleNotifications) {
-        this.toggleNotifications = toggleNotifications;
-    }
-
-    public Boolean hasToggleNotifications() {
-        return this.toggleNotifications;
-    }
-
-    public void intentSave() {
-        this.intentSave(false);
-    }
-
-    public void intentSave(Boolean force) {
-        if (this.isConnected() && !force) return;
-
-        Document document = this.toDocument();
-
-        if (force) {
-            VicnixFriends.getInstance().getProvider().saveSession(this.getUniqueId(), document);
-        } else {
-            ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSession(this.getUniqueId(), document));
-        }
-    }
 
     public void acceptFriendRequest(Session target) {
-        this.removeRequest(target);
-        this.addFriend(target);
+        this.sessionStorage.removeRequest(target.getUniqueId());
+        this.sessionStorage.addFriend(target.getUniqueId());
 
-        target.removeSentRequest(this);
-        target.addFriend(this);
+        target.getSessionStorage().removeSentRequest(this.getUniqueId());
+        target.getSessionStorage().addFriend(this.getUniqueId());
 
         this.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_ACCEPTED", target.getName()));
 
         target.sendMessage(Translation.getInstance().translateString("FRIEND_REQUEST_AS_FRIEND_ACCEPTED", this.getName()));
 
-        target.intentSave();
+        SessionManager.getInstance().intentSave((SessionStorage) target.getSessionStorage().forceClone(), target.getMaxFriendsSlots());
     }
 
     public void friendMessage(Session target, String message) {
-        if (!target.isFriend(this)) {
+        if (!target.getSessionStorage().isFriend(this.getUniqueId())) {
             this.sendMessage(new ComponentBuilder("Este jugador no esta en tu lista de amigos").color(ChatColor.RED).create());
 
             return;
@@ -245,8 +93,8 @@ public class Session {
             return;
         }
 
-        this.lastReplied = target.getUniqueId().toString();
-        target.lastReplied = this.getUniqueId().toString();
+        this.lastReplied = target.getUniqueId();
+        target.lastReplied = this.getUniqueId();
 
         target.sendMessage(new ComponentBuilder("[Amigos] ").color(ChatColor.YELLOW)
                 .append(this.getName()).color(ChatColor.GRAY)
@@ -265,26 +113,5 @@ public class Session {
                 .append(message).color(ChatColor.WHITE)
                 .create()
         );
-    }
-
-    public Document toDocument() {
-        return new Document("uuid", this.getUniqueId().toString())
-                .append("name", this.getName())
-                .append("friends", this.getFriends())
-                .append("requests", this.getRequests())
-                .append("sentRequests", this.getSentRequests())
-                .append("maxFriendsSlots", this.getMaxFriendsSlots())
-                .append("toggleRequests", this.hasToggleRequests())
-                .append("toggleNotifications", this.hasToggleNotifications());
-    }
-
-    @Override
-    public String toString() {
-        return "Session{" +
-                "name='" + name + '\'' +
-                ", uuid=" + uuid +
-                ", friends=" + friends +
-                ", requests=" + requests +
-                '}';
     }
 }

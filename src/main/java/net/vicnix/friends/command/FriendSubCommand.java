@@ -22,8 +22,4 @@ public abstract class FriendSubCommand {
 
         return null;
     }
-
-    public List<String> getComplete(ProxiedPlayer player, String[] args) {
-        return new ArrayList<>();
-    }
 }

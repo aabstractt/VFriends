@@ -1,5 +1,6 @@
 package net.vicnix.friends.session;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -28,58 +29,62 @@ public class SessionManager {
         return this.sessions.getOrDefault(uuid.toString(), null);
     }
 
-    public Session getOfflineSession(UUID uuid) throws SessionException {
+    public Session getOfflineSession(UUID uuid) {
         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
         Session session = null;
 
         if (player != null) {
             session = this.getSessionPlayer(player);
+        } else {
+            SessionStorage sessionStorage = VicnixFriends.getInstance().getProvider().loadSessionStorage(uuid);
+
+            if (sessionStorage != null) {
+                session = new Session(sessionStorage);
+            }
         }
 
         if (session == null) {
-            session = VicnixFriends.getInstance().getProvider().loadSession(uuid);
-        }
-
-        if (session == null) {
-            throw new SessionException("Session for " + uuid.toString() + " not found");
+            ProxyServer.getInstance().getLogger().info("Session for " + uuid.toString() + " not found");
         }
 
         return session;
     }
 
-    public Session getOfflineSession(String name) throws SessionException {
+    public Session getOfflineSession(String name) {
         ProxiedPlayer player = ProxyServer.getInstance().getPlayer(name);
 
         Session session = null;
 
         if (player != null) {
             session = this.getSessionPlayer(player);
+        } else {
+            SessionStorage sessionStorage = VicnixFriends.getInstance().getProvider().loadSessionStorage(name);
+
+            if (sessionStorage != null) {
+                session = new Session(sessionStorage);
+            }
         }
 
         if (session == null) {
-            session = VicnixFriends.getInstance().getProvider().loadSession(name);
-        }
-
-        if (session == null) {
-            throw new SessionException("Session for " + name + " not found");
+            ProxyServer.getInstance().getLogger().info(ChatColor.RED + "Session for " + name + " not found");
         }
 
         return session;
     }
 
-    public Session createSession(ProxiedPlayer player) {
-        Session session = VicnixFriends.getInstance().getProvider().loadSession(player.getUniqueId(), player.getName());
+    public SessionStorage createSession(ProxiedPlayer player) {
+        SessionStorage sessionStorage = VicnixFriends.getInstance().getProvider().loadSessionStorage(player.getUniqueId(), player.getName());
 
-        if (session == null) {
-            session = new Session(player.getName(), player.getUniqueId());
+        if (sessionStorage == null) {
+            sessionStorage = new SessionStorage(player.getName(), player.getUniqueId());
         }
 
-        ProxyServer.getInstance().getLogger().info("Session opened for " + session.getName());
+        ProxyServer.getInstance().getLogger().info("Session opened for " + sessionStorage.getName());
 
-        this.sessions.put(player.getUniqueId().toString(), session);
+        this.sessions.put(player.getUniqueId().toString(), new Session(sessionStorage));
 
-        return session;
+        return sessionStorage;
     }
 
     public void closeSession(ProxiedPlayer player) {
@@ -93,22 +98,45 @@ public class SessionManager {
 
         String prefix = Translation.getInstance().translatePrefix(session);
 
+        SessionStorage sessionStorage = (SessionStorage) session.getSessionStorage().forceClone();
+        Integer friendsSlots = session.getMaxFriendsSlots();
+
+        if (sessionStorage == null) {
+            ProxyServer.getInstance().getLogger().info("Session storage null");
+
+            return;
+        }
+
         new Thread(() -> {
-            for (String uuid : session.getFriends()) {
+            for (String uuid : sessionStorage.getFriends()) {
                 Session target = this.getSessionUuid(UUID.fromString(uuid));
 
                 if (target == null) continue;
 
-                if (!target.hasToggleNotifications()) continue;
+                if (!target.getSessionStorage().hasToggleNotifications()) continue;
 
                 target.sendMessage(new TextComponent(Translation.getInstance().translateString("FRIEND_LEFT", prefix)));
             }
 
-            session.intentSave(true);
+            this.intentSave(sessionStorage, friendsSlots, true);
 
             ProxyServer.getInstance().getLogger().info("Closing session for " + session.getName());
 
-            this.sessions.remove(player.getUniqueId().toString());
+            this.sessions.remove(sessionStorage.getUniqueId().toString());
         }).start();
+    }
+
+    public void intentSave(SessionStorage sessionStorage, Integer friendsSlots) {
+        this.intentSave(sessionStorage, friendsSlots, false);
+    }
+
+    public void intentSave(SessionStorage sessionStorage, Integer friendsSlots, Boolean force) {
+        if (this.getSessionUuid(sessionStorage.getUniqueId()) != null && !force) return;
+
+        if (force) {
+            VicnixFriends.getInstance().getProvider().saveSessionStorage(sessionStorage, friendsSlots);
+        } else {
+            ProxyServer.getInstance().getScheduler().runAsync(VicnixFriends.getInstance(), () -> VicnixFriends.getInstance().getProvider().saveSessionStorage(sessionStorage, friendsSlots));
+        }
     }
 }
