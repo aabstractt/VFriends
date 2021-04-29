@@ -26,7 +26,7 @@ public class MongoDBProvider implements IProvider {
         try {
             Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(VicnixFriends.getInstance().getDataFolder().getPath(), "config.yml"));
 
-            MongoClient mongoClient = new MongoClient();//new MongoClientURI(config.getString("mongouri")));
+            MongoClient mongoClient = new MongoClient(new MongoClientURI(config.getString("mongouri")));
 
             MongoDatabase database = mongoClient.getDatabase("VicnixCore");
 
